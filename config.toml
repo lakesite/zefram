@@ -1,0 +1,6 @@
+[zefram]
+apikey   = "secretkey"
+dbdriver = "sqlite3"
+dbpath   = "zefram.db"
+mailto   = "andy"
+mailfrom = "zefram@lakesite.net"
