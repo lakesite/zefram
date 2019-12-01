@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/lakesite/ls-config/pkg/config"
-	"github.com/lakesite/ls-fibre/pkg/service"
+	"github.com/lakesite/ls-config"
+	"github.com/lakesite/ls-fibre"
 	"github.com/pelletier/go-toml"
 
 	"github.com/lakesite/zefram/pkg/api"
@@ -60,7 +60,7 @@ func (ms *ManagerService) Init(cfgfile string) {
 // Daemonize sets up the web service and defines routes for the API.
 func (ms *ManagerService) Daemonize() {
 	address := config.Getenv("ZEFRAM_HOST", "127.0.0.1") + ":" + config.Getenv("ZEFRAM_PORT", "7990")
-	ws := service.NewWebService("zefram", address)
+	ws := fibre.NewWebService("zefram", address)
 	api := api.NewAPI(
 		ws,          // web service
 		ms.Config,   // app configuration

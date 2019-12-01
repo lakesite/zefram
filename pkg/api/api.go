@@ -7,15 +7,15 @@ import (
 
 	valid "github.com/asaskevich/govalidator"
 	"github.com/gorilla/schema"
-	"github.com/lakesite/ls-fibre/pkg/service"
+	"github.com/lakesite/ls-fibre"
 	"github.com/pelletier/go-toml"
 
-	"github.com/lakesite/zefram/pkg/mail"
+	"github.com/lakesite/ls-mail"
 	"github.com/lakesite/zefram/pkg/models"
 )
 
 type API struct {
-	WebService *service.WebService
+	WebService *fibre.WebService
 	AppConfig  *toml.Tree
 	DBConfig   map[string]*model.DBConfig
 }
@@ -67,7 +67,7 @@ func (api *API) ContactHandler(w http.ResponseWriter, r *http.Request) {
 
 // Create a new API for the provided web service.
 // ws is a ls-fibre WebService.
-func NewAPI(ws *service.WebService, ac *toml.Tree, dbc map[string]*model.DBConfig) *API {
+func NewAPI(ws *fibre.WebService, ac *toml.Tree, dbc map[string]*model.DBConfig) *API {
 	api := &API{
 		WebService: ws,
 		AppConfig:  ac,
