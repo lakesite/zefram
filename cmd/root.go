@@ -5,8 +5,10 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
+	"github.com/lakesite/ls-governor"
 
-	"github.com/lakesite/zefram/pkg/manager"
+	"github.com/lakesite/zefram/pkg/api"
+	"github.com/lakesite/zefram/pkg/models"
 )
 
 var (
@@ -18,12 +20,22 @@ var (
 		Short: "run zefram",
 		Long:  `run zefram with config.toml as a daemon`,
 		Run: func(cmd *cobra.Command, args []string) {
-			ms := &manager.ManagerService{}
+			gms := &governor.ManagerService{}
 			if config == "" {
 				config = "config.toml"
 			}
-			ms.Init(config)
-			ms.Daemonize()
+
+			// setup manager and create api
+			gms.InitManager(config)
+			gms.InitDatastore("zefram")
+			gapi := gms.CreateAPI("zefram")
+
+			// bridge logic
+			model.Migrate(gapi, "zefram")
+			api.SetupRoutes(gapi)
+
+			// now daemonize the api
+			gms.Daemonize(gapi)
 		},
 	}
 
